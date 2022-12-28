@@ -22,23 +22,21 @@ class GroupAdminTest {
 
     @Test
     void register() {
-        logger.info(()->JvmUtilities.objectFootprint(ga));
+        assertEquals(ga.getNumOfObservers(), 0);
         ga.register(member1);
-        logger.info(()->JvmUtilities.objectFootprint(ga));
+        assertEquals(ga.getNumOfObservers(), 1);
         ga.register(member2);
-        logger.info(()->JvmUtilities.objectFootprint(ga));
+        assertEquals(ga.getNumOfObservers(), 2);
     }
 
     @Test
     void unregister() {
-        logger.info(()->JvmUtilities.objectFootprint(ga));
+        assertEquals(ga.getNumOfObservers(), 0);
         ga.unregister(member1);
-        logger.info(()->JvmUtilities.objectFootprint(ga));
+        assertEquals(ga.getNumOfObservers(), 0);
         ga.register(member1);
-        logger.info(() -> "register string");
-        logger.info(()->JvmUtilities.objectFootprint(ga));
         ga.unregister(member1);
-        logger.info(()->JvmUtilities.objectFootprint(ga));
+        assertEquals(ga.getNumOfObservers(), 0);
     }
 
     @Test
@@ -46,11 +44,17 @@ class GroupAdminTest {
         ga.register(member1);
         ga.register(member2);
 
-        ga.insert(0, "abcd");
+        ga.insert(0, "abjasblijbadskjnaskjdvcd");
         logger.info(()->JvmUtilities.objectFootprint(ga));
         logger.info(()->JvmUtilities.objectTotalSize(ga));
         logger.info(() -> ga.toString());
         ga.insert(0, "adddbcd");
+        logger.info(()->JvmUtilities.objectFootprint(ga));
+        logger.info(()->JvmUtilities.objectTotalSize(ga));
+        ga.insert(0, "adddaaaaaaaabcd");
+        logger.info(()->JvmUtilities.objectFootprint(ga));
+        logger.info(()->JvmUtilities.objectTotalSize(ga));
+        ga.insert(0, "adddaaaaaaaabcd");
         logger.info(()->JvmUtilities.objectFootprint(ga));
         logger.info(()->JvmUtilities.objectTotalSize(ga));
     }
@@ -61,9 +65,9 @@ class GroupAdminTest {
         ga.register(member2);
 
         ga.insert(0, "abcd");
-        logger.info(() -> ga.toString());
+        assertEquals(member1.toString(), member2.toString());
         ga.append("xyz");
-        logger.info(() -> ga.toString());
+        assertEquals(member1.toString(), member2.toString());
     }
 
     @Test
@@ -72,20 +76,21 @@ class GroupAdminTest {
         ga.register(member2);
 
         ga.insert(0, "abcd");
-        logger.info(() -> ga.toString());
+        assertEquals(member1.toString(), member2.toString());
         ga.delete(1, 2);
-        logger.info(() -> ga.toString());
+        assertEquals(member1.toString(), member2.toString());
     }
 
     @Test
     void undo() {
         ga.register(member1);
         ga.register(member2);
+        assertEquals(member1.toString(), member2.toString());
         ga.insert(0, "abcd");
-        logger.info(() -> ga.toString());
+        assertEquals(member1.toString(), member2.toString());
         ga.delete(1, 2);
-        logger.info(() -> ga.toString());
+        assertEquals(member1.toString(), member2.toString());
         ga.undo();
-        logger.info(() -> ga.toString());
+        assertEquals(member1.toString(), member2.toString());
     }
 }

@@ -13,7 +13,8 @@ public class GroupAdmin implements Sender {
      */
     @Override
     public void register(Member obj) {
-        observers.add(obj);
+        if (!observers.contains(obj))
+            observers.add(obj);
     }
 
     /**
@@ -82,6 +83,13 @@ public class GroupAdmin implements Sender {
     public void undo() {
         usb.undo();
         notifyObservers();
+    }
+
+    /**
+     * @return number of observers
+     */
+    public int getNumOfObservers() {
+        return observers.size();
     }
 
     @Override
