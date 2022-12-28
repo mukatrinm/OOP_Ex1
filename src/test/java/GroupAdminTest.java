@@ -47,7 +47,12 @@ class GroupAdminTest {
         ga.register(member2);
 
         ga.insert(0, "abcd");
+        logger.info(()->JvmUtilities.objectFootprint(ga));
+        logger.info(()->JvmUtilities.objectTotalSize(ga));
         logger.info(() -> ga.toString());
+        ga.insert(0, "adddbcd");
+        logger.info(()->JvmUtilities.objectFootprint(ga));
+        logger.info(()->JvmUtilities.objectTotalSize(ga));
     }
 
     @Test

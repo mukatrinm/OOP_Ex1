@@ -7,7 +7,9 @@ public class GroupAdmin implements Sender {
     private ArrayList<Member> observers = new ArrayList<>();
 
     /**
-     * @param obj
+     * Register an Observer.
+     *
+     * @param obj the interested observer
      */
     @Override
     public void register(Member obj) {
@@ -15,7 +17,9 @@ public class GroupAdmin implements Sender {
     }
 
     /**
-     * @param obj
+     * Unregister an Observer.
+     *
+     * @param obj the interested observer
      */
     @Override
     public void unregister(Member obj) {
@@ -24,9 +28,6 @@ public class GroupAdmin implements Sender {
 
     /**
      * Notifies all Observers of a change.
-     * <p>
-     * TODO - this is often public in lots of other examples I've seen - why??? Surely better to control access to this
-     * so that Observers are only notified via this class' business methods i.e. createNewBuyOrder?
      */
     private void notifyObservers() {
         // Notify interested parties...
@@ -36,8 +37,10 @@ public class GroupAdmin implements Sender {
     }
 
     /**
-     * @param offset
-     * @param obj
+     * Inserts the string into this character sequence and notifies all observers.
+     *
+     * @param offset the offset.
+     * @param obj    a string.
      */
     @Override
     public void insert(int offset, String obj) {
@@ -46,7 +49,9 @@ public class GroupAdmin implements Sender {
     }
 
     /**
-     * @param obj
+     * Appends the specified string to this character sequence and notifies all members.
+     *
+     * @param obj a string
      */
     @Override
     public void append(String obj) {
@@ -55,8 +60,13 @@ public class GroupAdmin implements Sender {
     }
 
     /**
-     * @param start
-     * @param end
+     * Removes the characters in a substring of this sequence. The substring begins at the specified
+     * start and extends to the character at index end - 1 or to the end of the sequence if no
+     * such character exists. If start is equal to end, no changes are made.
+     * finally, notify all members about the change.
+     *
+     * @param start The beginning index, inclusive.
+     * @param end   The ending index, exclusive.
      */
     @Override
     public void delete(int start, int end) {
@@ -65,7 +75,8 @@ public class GroupAdmin implements Sender {
     }
 
     /**
-     *
+     * the object usb will hold the previous state of the string. if there is no previous state it will be an empty string,
+     * then notify all observers.
      */
     @Override
     public void undo() {

@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UndoableStringBuilderTest {
     StringBuilder sb;
-    UndoableStringBuilder usb;
+    UndoableStringBuilder usb = new UndoableStringBuilder();
 
     @BeforeEach
     void setUp() {

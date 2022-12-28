@@ -1,20 +1,45 @@
 package observer;
 
 import java.util.Stack;
-
-/*
-Use the class you've implemented in previous assignment
+/**
+ * StringBuilder with undo support
+ * java.lang.StringBuilder - class with modifier <b>final</b>,
+ * so no inheritance, use delegation.
  */
+interface Action{
+    void undo();
+}
+
 public class UndoableStringBuilder {
-    private final Stack<StringBuilder> history; // a stack to save previous versions of the string builder.
-    private StringBuilder sb;
+
+
+    private StringBuilder stringBuilder; // delegate
+    /**
+     * Operations that are the reverse of those performed.
+     * That is, when append is called, it is placed on the stack
+     * "delete" operation. When calling undo() it
+     * will be executed.    */
+    private Stack<Action> actions = new Stack<>();
+
+    // constructor
+    public UndoableStringBuilder() {
+        stringBuilder = new StringBuilder();
+    }
 
     /**
-     * Constructs a history stack and a string builder with no characters in it and an initial capacity of 16 characters.
+     * Causes this character sequence to be replaced by the reverse of the sequence.
+     *
+     * @return a reference to this object.
      */
-    public UndoableStringBuilder() {
-        sb = new StringBuilder();
-        history = new Stack<>();
+    public UndoableStringBuilder reverse() {
+        stringBuilder.reverse();
+        Action action = new Action(){
+            public void undo() {
+                stringBuilder.reverse();
+            }
+        };
+        actions.add(action);
+        return this;
     }
 
     /**
@@ -24,9 +49,41 @@ public class UndoableStringBuilder {
      * @return a reference to this object.
      */
     public UndoableStringBuilder append(String str) {
-        sb.append(str);
-        history.push(new StringBuilder(sb));
+        stringBuilder.append(str);
 
+        Action action = new Action(){
+            public void undo() {
+                stringBuilder.delete(
+                        stringBuilder.length() - str.length(),
+                        stringBuilder.length());
+            }
+        };
+        actions.add(action);
+        return this;
+    }
+
+    /**
+     * Inserts the string into this character sequence.
+     *
+     * @param offset the offset.
+     * @param str    a string.
+     * @return a reference to this object.
+     */
+    public UndoableStringBuilder insert(int offset, String str) {
+        try {
+            stringBuilder.insert(offset, str);
+            Action action = new Action() {
+                public void undo() {
+                    stringBuilder.delete(offset, offset + str.length());
+                }
+            };
+            actions.add(action);
+        } catch (StringIndexOutOfBoundsException ex) {
+            if (offset < 0)
+                System.err.println("Offset can not be negative");
+            else if (offset > str.length() - 1)
+                System.err.println("Offset can not be greater then the last index");
+        }
         return this;
     }
 
@@ -41,38 +98,22 @@ public class UndoableStringBuilder {
      */
     public UndoableStringBuilder delete(int start, int end) {
         try {
-            sb.delete(start, end);
-            history.push(new StringBuilder(sb));
+            String deleted = stringBuilder.substring(start, end);
+            stringBuilder.delete(start, end);
+            Action action = new Action() {
+                public void undo() {
+                    stringBuilder.insert(start, deleted);
+                }
+            };
+            actions.add(action);
         } catch (StringIndexOutOfBoundsException ex) {
             if (start < 0)
                 System.err.println("Start index is negetive");
-            else if (end > this.sb.length())
+            else if (end > this.stringBuilder.length())
                 System.err.println("End index is greater then the length of the string");
             else if (start > end)
                 System.err.println("Start index is greater then end index");
         }
-
-        return this;
-    }
-
-    /**
-     * Inserts the string into this character sequence.
-     *
-     * @param offset the offset.
-     * @param str    a string.
-     * @return a reference to this object.
-     */
-    public UndoableStringBuilder insert(int offset, String str) {
-        try {
-            sb.insert(offset, str);
-            history.push(new StringBuilder(sb));
-        } catch (StringIndexOutOfBoundsException ex) {
-            if (offset < 0)
-                System.err.println("Offset can not be negative");
-            else if (offset > str.length() - 1)
-                System.err.println("Offset can not be greater then the last index");
-        }
-
         return this;
     }
 
@@ -90,32 +131,34 @@ public class UndoableStringBuilder {
      */
     public UndoableStringBuilder replace(int start, int end, String str) {
         try {
-            sb.replace(start, end, str);
-            history.push(new StringBuilder(sb));
+            String deleted = stringBuilder.substring(start, end);
+            stringBuilder.replace(start, end, str);
+            Action action = new Action() {
+                public void undo() {
+                    stringBuilder.replace(start, start + str.length(), deleted);
+                }
+            };
+            actions.add(action);
         } catch (StringIndexOutOfBoundsException ex) {
             if (start < 0)
                 System.err.println("Start index is negative");
-            else if (end > this.sb.length())
+            else if (end > this.stringBuilder.length())
                 System.err.println("End index is greater then the length of the string");
             else if (start > end)
                 System.err.println("Start index is greater then end index");
         } catch (NullPointerException ex) {
             System.out.println("null string");
         }
-
         return this;
     }
 
     /**
-     * Causes this character sequence to be replaced by the reverse of the sequence.
-     *
-     * @return a reference to this object.
+     * undo to the previous state.
      */
-    public UndoableStringBuilder reverse() {
-        sb.reverse();
-        history.push(new StringBuilder(sb));
-
-        return this;
+    public void undo(){
+        if(!actions.isEmpty()){
+            actions.pop().undo();
+        }
     }
 
     /**
@@ -125,23 +168,7 @@ public class UndoableStringBuilder {
      *
      * @return a string representation of this sequence of characters.
      */
-    @Override
     public String toString() {
-        return sb.toString();
-    }
-
-    /**
-     * the object sb will hold the previous state of the string. if there is no previous state it will be an empty string
-     */
-    public void undo() {
-        if (!history.empty()) {
-            history.pop();
-
-            // need to check if history is empty again because we want to get the top of the stack after popping.
-            if (!history.empty())
-                sb = history.peek();
-            else
-                sb = new StringBuilder();
-        }
+        return stringBuilder.toString();
     }
 }
