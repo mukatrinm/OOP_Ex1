@@ -13,13 +13,13 @@ interface Action{
 public class UndoableStringBuilder {
 
 
-    private StringBuilder stringBuilder; // delegate
+    private final StringBuilder stringBuilder; // delegate
     /**
      * Operations that are the reverse of those performed.
      * That is, when append is called, it is placed on the stack
      * "delete" operation. When calling undo() it
      * will be executed.    */
-    private Stack<Action> actions = new Stack<>();
+    private final Stack<Action> actions = new Stack<>();
 
     // constructor
     public UndoableStringBuilder() {
@@ -108,7 +108,7 @@ public class UndoableStringBuilder {
             actions.add(action);
         } catch (StringIndexOutOfBoundsException ex) {
             if (start < 0)
-                System.err.println("Start index is negetive");
+                System.err.println("Start index is negative");
             else if (end > this.stringBuilder.length())
                 System.err.println("End index is greater then the length of the string");
             else if (start > end)

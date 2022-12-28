@@ -3,8 +3,8 @@ package observer;
 import java.util.ArrayList;
 
 public class GroupAdmin implements Sender {
-    private UndoableStringBuilder usb = new UndoableStringBuilder();
-    private ArrayList<Member> observers = new ArrayList<>();
+    private final UndoableStringBuilder usb = new UndoableStringBuilder();
+    private final ArrayList<Member> observers = new ArrayList<>();
 
     /**
      * Register an Observer.
@@ -41,7 +41,7 @@ public class GroupAdmin implements Sender {
      * Inserts the string into this character sequence and notifies all observers.
      *
      * @param offset the offset.
-     * @param obj    a string.
+     * @param obj a string.
      */
     @Override
     public void insert(int offset, String obj) {
@@ -67,7 +67,7 @@ public class GroupAdmin implements Sender {
      * finally, notify all members about the change.
      *
      * @param start The beginning index, inclusive.
-     * @param end   The ending index, exclusive.
+     * @param end The ending index, exclusive.
      */
     @Override
     public void delete(int start, int end) {
