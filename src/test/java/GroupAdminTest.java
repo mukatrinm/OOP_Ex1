@@ -45,18 +45,19 @@ class GroupAdminTest {
         ga.register(member2);
 
         ga.insert(0, "abjasblijbadskjnaskjdvcd");
-        logger.info(()->JvmUtilities.objectFootprint(ga));
-        logger.info(()->JvmUtilities.objectTotalSize(ga));
+//        logger.info(()->JvmUtilities.objectFootprint(ga));
+//        logger.info(()->JvmUtilities.objectTotalSize(ga));
         logger.info(() -> ga.toString());
         ga.insert(0, "adddbcd");
-        logger.info(()->JvmUtilities.objectFootprint(ga));
-        logger.info(()->JvmUtilities.objectTotalSize(ga));
+//        logger.info(()->JvmUtilities.objectFootprint(ga));
+//        logger.info(()->JvmUtilities.objectTotalSize(ga));
         ga.insert(0, "adddaaaaaaaabcd");
-        logger.info(()->JvmUtilities.objectFootprint(ga));
-        logger.info(()->JvmUtilities.objectTotalSize(ga));
+//        logger.info(()->JvmUtilities.objectFootprint(ga));
+//        logger.info(()->JvmUtilities.objectTotalSize(ga));
         ga.insert(0, "adddaaaaaaaabcd");
-        logger.info(()->JvmUtilities.objectFootprint(ga));
-        logger.info(()->JvmUtilities.objectTotalSize(ga));
+        assertEquals(member1.toString(), "ConcreteMember{usb=adddaaaaaaaabcdadddaaaaaaaabcdadddbcdabjasblijbadskjnaskjdvcd}");
+//        logger.info(()->JvmUtilities.objectFootprint(ga));
+//        logger.info(()->JvmUtilities.objectTotalSize(ga));
     }
 
     @Test

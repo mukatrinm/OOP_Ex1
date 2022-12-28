@@ -1,7 +1,5 @@
 package observer;
 
-import java.util.Objects;
-
 public class ConcreteMember implements Member{
     private UndoableStringBuilder usb;
     /**
@@ -11,8 +9,6 @@ public class ConcreteMember implements Member{
      */
     @Override
     public void update(UndoableStringBuilder usb) {
-        // update only if there is a change
-        if (this.usb != null &&  !this.usb.toString().equals(usb.toString()))
             this.usb = usb;
     }
 
