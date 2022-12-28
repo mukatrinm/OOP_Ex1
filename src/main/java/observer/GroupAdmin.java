@@ -67,4 +67,12 @@ public class GroupAdmin implements Sender {
             obs.update(usb);
         }
     }
+
+    @Override
+    public String toString() {
+        return "GroupAdmin{" +
+                "usb=" + usb +
+                ", observers=" + observers +
+                '}';
+    }
 }
