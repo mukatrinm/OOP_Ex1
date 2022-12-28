@@ -23,15 +23,26 @@ public class GroupAdmin implements Sender {
     }
 
     /**
+     * Notifies all Observers of a change.
+     * <p>
+     * TODO - this is often public in lots of other examples I've seen - why??? Surely better to control access to this
+     * so that Observers are only notified via this class' business methods i.e. createNewBuyOrder?
+     */
+    private void notifyObservers() {
+        // Notify interested parties...
+        for (final Member observer : observers) {
+            observer.update(usb);
+        }
+    }
+
+    /**
      * @param offset
      * @param obj
      */
     @Override
     public void insert(int offset, String obj) {
         usb.insert(offset, obj);
-        for (Member obs : observers) {
-            obs.update(usb);
-        }
+        notifyObservers();
     }
 
     /**
@@ -40,9 +51,7 @@ public class GroupAdmin implements Sender {
     @Override
     public void append(String obj) {
         usb.append(obj);
-        for (Member obs : observers) {
-            obs.update(usb);
-        }
+        notifyObservers();
     }
 
     /**
@@ -52,9 +61,7 @@ public class GroupAdmin implements Sender {
     @Override
     public void delete(int start, int end) {
         usb.delete(start, end);
-        for (Member obs : observers) {
-            obs.update(usb);
-        }
+        notifyObservers();
     }
 
     /**
@@ -63,9 +70,7 @@ public class GroupAdmin implements Sender {
     @Override
     public void undo() {
         usb.undo();
-        for (Member obs : observers) {
-            obs.update(usb);
-        }
+        notifyObservers();
     }
 
     @Override
