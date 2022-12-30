@@ -27,6 +27,8 @@ class GroupAdminTest {
         assertEquals(ga.getNumOfObservers(), 1);
         ga.register(member2);
         assertEquals(ga.getNumOfObservers(), 2);
+        ga.register(member2);
+        assertEquals(ga.getNumOfObservers(), 2);
     }
 
     @Test
@@ -44,20 +46,11 @@ class GroupAdminTest {
         ga.register(member1);
         ga.register(member2);
 
-        ga.insert(0, "abjasblijbadskjnaskjdvcd");
-//        logger.info(()->JvmUtilities.objectFootprint(ga));
-//        logger.info(()->JvmUtilities.objectTotalSize(ga));
-        logger.info(() -> ga.toString());
-        ga.insert(0, "adddbcd");
-//        logger.info(()->JvmUtilities.objectFootprint(ga));
-//        logger.info(()->JvmUtilities.objectTotalSize(ga));
-        ga.insert(0, "adddaaaaaaaabcd");
-//        logger.info(()->JvmUtilities.objectFootprint(ga));
-//        logger.info(()->JvmUtilities.objectTotalSize(ga));
-        ga.insert(0, "adddaaaaaaaabcd");
-        assertEquals(member1.toString(), "ConcreteMember{usb=adddaaaaaaaabcdadddaaaaaaaabcdadddbcdabjasblijbadskjnaskjdvcd}");
-//        logger.info(()->JvmUtilities.objectFootprint(ga));
-//        logger.info(()->JvmUtilities.objectTotalSize(ga));
+        ga.insert(0, "World");
+        //logger.info(() -> ga.toString());
+        ga.insert(0, "Hello ");
+        ga.insert(11, "!");
+        assertEquals("Hello World!", member1.toString());
     }
 
     @Test
@@ -66,9 +59,9 @@ class GroupAdminTest {
         ga.register(member2);
 
         ga.insert(0, "abcd");
-        assertEquals(member1.toString(), member2.toString());
+        assertEquals("abcd", member1.toString());
         ga.append("xyz");
-        assertEquals(member1.toString(), member2.toString());
+        assertEquals("abcdxyz", member1.toString());
     }
 
     @Test
@@ -77,21 +70,22 @@ class GroupAdminTest {
         ga.register(member2);
 
         ga.insert(0, "abcd");
-        assertEquals(member1.toString(), member2.toString());
+        assertEquals("abcd", member1.toString());
         ga.delete(1, 2);
-        assertEquals(member1.toString(), member2.toString());
+        assertEquals("acd", member1.toString());
     }
 
     @Test
     void undo() {
         ga.register(member1);
         ga.register(member2);
-        assertEquals(member1.toString(), member2.toString());
-        ga.insert(0, "abcd");
-        assertEquals(member1.toString(), member2.toString());
-        ga.delete(1, 2);
-        assertEquals(member1.toString(), member2.toString());
         ga.undo();
-        assertEquals(member1.toString(), member2.toString());
+        assertEquals("", member1.toString());
+        ga.insert(0, "abcd");
+        assertEquals("abcd", member1.toString());
+        ga.delete(1, 2);
+        assertEquals("acd", member1.toString());
+        ga.undo();
+        assertEquals("abcd", member1.toString());
     }
 }
