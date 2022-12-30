@@ -31,9 +31,12 @@ public class GroupAdmin implements Sender {
      * Notifies all Observers of a change.
      */
     private void notifyObservers() {
-        // Notify interested parties...
-        for (final Member observer : observers) {
-            observer.update(usb);
+        int curren_actions_size = getNumOfObservers();
+        // notify observers only when the usb have been changed, if there was an exception or action not performed
+        // don't notify the observers.
+        if (curren_actions_size != usb.getActionsSize())
+            for (final Member observer : observers) {
+                observer.update(usb);
         }
     }
 
@@ -81,6 +84,7 @@ public class GroupAdmin implements Sender {
      */
     @Override
     public void undo() {
+        int curren_actions_size = usb.getActionsSize();
         usb.undo();
         notifyObservers();
     }

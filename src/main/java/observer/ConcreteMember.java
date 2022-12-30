@@ -2,6 +2,11 @@ package observer;
 
 public class ConcreteMember implements Member{
     private UndoableStringBuilder usb;
+
+    public ConcreteMember() {
+        usb = new UndoableStringBuilder();
+    }
+
     /**
      * Updates the member of a change.
      *
@@ -14,8 +19,6 @@ public class ConcreteMember implements Member{
 
     @Override
     public String toString() {
-        return "ConcreteMember{" +
-                "usb=" + usb +
-                '}';
+        return usb.toString();
     }
 }

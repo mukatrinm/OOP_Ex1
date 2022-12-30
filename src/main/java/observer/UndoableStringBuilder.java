@@ -26,6 +26,10 @@ public class UndoableStringBuilder {
         stringBuilder = new StringBuilder();
     }
 
+    public int getActionsSize() {
+        return actions.size();
+    }
+
     /**
      * Causes this character sequence to be replaced by the reverse of the sequence.
      *
